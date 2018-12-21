@@ -1,0 +1,21 @@
+{
+  "name": "virtualdom",
+  "version": "1.0.0",
+  "description": "virtual dom",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [
+    "virtual",
+    "dom"
+  ],
+  "author": "DrugsZ",
+  "license": "MIT",
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-env": "^1.7.0"
+  }
+}
