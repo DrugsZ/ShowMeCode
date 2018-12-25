@@ -4,7 +4,8 @@
   "description": "virtual dom",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "dev": "parcel index.html"
   },
   "keywords": [
     "virtual",
