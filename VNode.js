@@ -9,13 +9,13 @@ class VNode{
     this.props = props;
     this.children = children
     this.elm = null;
-    this.text = '';
+    this.text = null;
   }
 }
 
 const createElm = (vnode) => {
-  if(typeof vnode === 'string'){
-    return document.createTextNode(vnode)
+  if(isPrimitive(vnode.text)){
+    return document.createTextNode(vnode.text)
   }
 
   const {
@@ -41,7 +41,32 @@ const createElm = (vnode) => {
   return elm
 }
 
+const normalizeChildren = (children) => {
+  const res = []
+  children.forEach(child => {
+    if(isPrimitive(child)){
+      const node = new VNode();
+      node.text = child
+      child = node
+    }
+    res.push(child)
+  })
+
+  return res
+}
+
+function isPrimitive (value) {
+  return (
+    typeof value === 'string' ||
+    typeof value === 'number' ||
+    // $flow-disable-line
+    typeof value === 'symbol' ||
+    typeof value === 'boolean'
+  )
+}
+
 export {
   VNode,
-  createElm
+  createElm,
+  normalizeChildren
 }
