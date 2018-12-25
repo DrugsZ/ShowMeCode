@@ -1,3 +1,6 @@
+import {isPrimitive} from './util'
+
+
 class VNode{
   constructor(tag, props,children){
     props = props ? props : Object.create(null)
@@ -8,8 +11,8 @@ class VNode{
    
     this.props = props;
     this.children = children
-    this.elm = null;
-    this.text = null;
+    this.elm = undefined;
+    this.text = undefined;
   }
 }
 
@@ -53,16 +56,6 @@ const normalizeChildren = (children) => {
   })
 
   return res
-}
-
-function isPrimitive (value) {
-  return (
-    typeof value === 'string' ||
-    typeof value === 'number' ||
-    // $flow-disable-line
-    typeof value === 'symbol' ||
-    typeof value === 'boolean'
-  )
 }
 
 export {
