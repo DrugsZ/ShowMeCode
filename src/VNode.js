@@ -1,65 +1,80 @@
-import {isPrimitive} from './util'
+import { isPrimitive } from './util';
 
 
-class VNode{
-  constructor(tag, props,children){
-    props = props ? props : Object.create(null)
+class VNode {
+  constructor(tag, props = {}, children) {
     this.tag = tag;
-    
+
     const key = props && props.key;
     this.key = key;
-   
+
     this.props = props;
-    this.children = children
+    this.children = children;
     this.elm = undefined;
     this.text = undefined;
   }
 }
 
 const createElm = (vnode) => {
-  if(isPrimitive(vnode.text)){
-    return document.createTextNode(vnode.text)
+  if (isPrimitive(vnode.text)) {
+    return document.createTextNode(vnode.text);
   }
 
   const {
-    tag, 
-    props,
-    children} = vnode;
-  const elm = vnode.elm = document.createElement(tag);
-  
+    tag,
+    props = {},
+    children,
+  } = vnode;
+  vnode.elm = document.createElement(tag);
+  const { elm } = vnode;
+
   const {
-    style = {}
-  } = props
+    style = {},
+  } = props;
 
-  Object.keys(style).forEach(key => {
-    elm.setAttribute(key,style[key])
-  })
+  Object.keys(style).forEach((key) => {
+    elm.setAttribute(key, style[key]);
+  });
 
-  if(children){
-    children.forEach(node => {
-      elm.appendChild(createElm(node))
-    })
+  if (children) {
+    children.forEach((node) => {
+      elm.appendChild(createElm(node));
+    });
   }
 
-  return elm
-}
+  return vnode.elm;
+};
+
+/**
+ *
+ * @param {string | number | symbol | boolean} str 创建文字节点的值
+ * @return vnode
+ */
+const createTextNode = (str) => {
+  const node = new VNode();
+  node.text = str;
+  return node;
+};
+
+export const createEmptyVNode = () => new VNode();
 
 const normalizeChildren = (children) => {
-  const res = []
-  children.forEach(child => {
-    if(isPrimitive(child)){
-      const node = new VNode();
-      node.text = child
-      child = node
+  const res = [];
+  let newChild = Object.create(null);
+  children.forEach((child) => {
+    if (isPrimitive(child)) {
+      newChild = createTextNode(child);
+    } else {
+      newChild = child;
     }
-    res.push(child)
-  })
+    res.push(newChild);
+  });
 
-  return res
-}
+  return res;
+};
 
 export {
   VNode,
   createElm,
-  normalizeChildren
-}
+  normalizeChildren,
+};

@@ -1,14 +1,15 @@
-import { VNode,normalizeChildren } from './VNode';
-export {createElm} from './VNode';
-export {patch} from './patch';
+import { VNode, normalizeChildren } from './VNode';
 
-export function createElement( tag, props, ...children ) {
-	if(children){
-		children = normalizeChildren(children);
-	}
-	return new VNode(tag,props,children);
+import init from './patch';
+
+export default init;
+
+export { createElm } from './VNode';
+
+export function createElement(tag, props, ...children) {
+  let newChildren;
+  if (children) {
+    newChildren = normalizeChildren(children);
+  }
+  return new VNode(tag, props || {}, newChildren);
 }
-    
-
-
-// patch(element,element_1)
