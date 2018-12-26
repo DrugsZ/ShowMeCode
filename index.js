@@ -1,18 +1,36 @@
-import {createElm,createElement} from './src/index.js';
-// const  = VDOM
-  let a = 7124
-  let b = 4
-  let c = true
-  const element = (
-    <div>
-        hello123<span key={a} style={{width:"100px", height:'100px',backgroundColor:'red'}}>world! {c}</span>
-    </div>
-  );
+import init, { createElement } from './src/index';
 
-  const element_1 = (
-    <h3 key={b}>2922</h3>
-  );
+const patch = init();
+console.log(patch);
+const a = 7124;
+const test = s => console.log(s);
+const testOne = s => console.log(s);
+const classR = 'r';
+const element = (
+  <div className="test test1">
+        hello123
+    <span onClick={test} onKeyDown={testOne} tabIndex={0} role="button" key={a} style={{ width: '100px', height: '100px', backgroundColor: 'red' }}>
+        world!
+    </span>
+  </div>
+);
 
-  let elm = createElm(element)
-  document.body.appendChild(elm)
-  let elm_1 = createElm(element_1)
+// const elementOne = (
+//   <h1>
+//         hello123
+//     <span key={a} style={{ width: '100px', height: '100px', backgroundColor: 'red' }}>
+//       world!
+//     </span>
+//   </h1>
+// );
+// const elementOne = (
+//   <h3 key={b}>2922</h3>
+// );
+
+console.log(element);
+
+document.body.appendChild(patch(undefined, element).elm);
+
+// setTimeout(() => {
+//   patch(element, elementOne);
+// }, 3000);
