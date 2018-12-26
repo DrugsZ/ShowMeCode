@@ -1,3 +1,26 @@
 {
-    "extends": "airbnb"
+  "extends": "airbnb",
+  "env": {
+    "browser": true
+  },
+  "rules": {
+    "no-param-reassign": ["error", 
+      { 
+        "props": true,
+        "ignorePropertyModificationsFor": [
+          "acc", // for reduce accumulators
+          "accumulator", // for reduce accumulators
+          "e", // for e.returnvalue
+          "ctx", // for Koa routing
+          "req", // for Express requests
+          "request", // for Express requests
+          "res", // for Express responses
+          "response", // for Express responses
+          "vnode"
+        ]
+      }
+    ],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "react/react-in-jsx-scope":0
+  }
 }
