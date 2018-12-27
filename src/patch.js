@@ -6,15 +6,31 @@ const sameVnode = (old, now) => (
   old.key === now.key && old.tag === now.tag
 );
 
-export default function init(modules) {
-  const addVnodes = (parentElm, vnodes) => {
+export default function init() {
+  /**
+   *
+   * @param {Node} parentElm 将被操作的父节点
+   * @param {Array<VNode>} vnodes 将要插入的节点
+   * @param {Node | null} refNode 参考节点
+   */
+  const addVnodes = (parentElm, vnodes, refNode) => {
     const len = vnodes.length;
-    for (let i = 0; i < len; i++) {
+    for (let i = 0; i < len; i += 1) {
       const vnode = vnodes[i];
+      parentElm.insertBefore(createElm(vnode), refNode);
     }
   };
+  /**
+   *
+   * @param {Node} parentElm 将被操作的父节点
+   * @param {Array<VNode>} vnodes 将要移除的结点
+   */
   const removeVnodes = (parentElm, vnodes) => {
-
+    const len = vnodes.length;
+    for (let i = 0; i < len; i += 1) {
+      const vnode = vnodes[i];
+      parentElm.removeChild(vnode.elm);
+    }
   };
   const patchVnode = (oldVnode, vnode) => {
     vnode.elm = oldVnode.elm;
@@ -36,6 +52,18 @@ export default function init(modules) {
     }
   };
 
+  const createKeyToOldIdx = (children, beginIdx, endIdx) => {
+    const map = new Map();
+    let key;
+    for (let index = beginIdx; index < endIdx; index++) {
+      const ch = children[index];
+      key = ch.key;
+      map.set(key, index);
+    }
+
+    return map;
+  };
+
   function updateChildren(parentElm, oldCh, ch) {
     let oldStartIdx = 0;
     let newStartIdx = 0;
@@ -45,6 +73,9 @@ export default function init(modules) {
     let newEndIdx = ch.length - 1;
     let newStartVnode = ch[newStartIdx];
     let newEndVnode = ch[newEndIdx];
+    let oldKeyToIdx;
+    let idxInOld;
+    let elmToMove;
 
     while (oldStartIdx <= oldEndIdx && newStartIdx <= newEndIdx) {
       if (isUndef(oldStartVnode)) {
@@ -79,6 +110,19 @@ export default function init(modules) {
         newEndIdx -= 1;
         oldStartVnode = oldCh[oldEndIdx];
         newEndVnode = ch[newEndIdx];
+      } else {
+        if (isUndef(oldKeyToIdx)) {
+          oldKeyToIdx = createKeyToOldIdx(oldCh, oldStartIdx, oldEndIdx);
+        }
+        idxInOld = oldKeyToIdx.get(newStartVnode.key);
+
+        if (isUndef(idxInOld)) {
+          parentElm.insertBefore(createElm(newStartVnode), oldStartVnode);
+          newStartIdx += 1;
+          newStartVnode = ch[newStartIdx];
+        } else {
+          elmToMove = oldCh[idxInOld];
+        }
       }
     }
   }
