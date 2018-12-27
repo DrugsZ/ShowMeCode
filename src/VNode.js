@@ -17,7 +17,8 @@ class VNode {
 
 const createElm = (vnode) => {
   if (isPrimitive(vnode.text)) {
-    return document.createTextNode(vnode.text);
+    vnode.elm = document.createTextNode(vnode.text);
+    return vnode.elm;
   }
 
   const {
