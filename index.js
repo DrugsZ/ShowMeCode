@@ -1,36 +1,24 @@
 import init, { createElement } from './src/index';
 
 const patch = init();
-console.log(patch);
-const a = 7124;
-const test = s => console.log(s);
-const testOne = s => console.log(s);
-const classR = 'r';
-const element = (
-  <div className="test test1">
-        hello123
-    <span onClick={test} onKeyDown={testOne} tabIndex={0} role="button" key={a} style={{ width: '100px', height: '100px', backgroundColor: 'red' }}>
-        world!
-    </span>
+let a = 7124;
+let oldnode = null;
+
+const test = () => (
+  <div>
+    <h3><span>{a}</span></h3>
   </div>
 );
 
-// const elementOne = (
-//   <h1>
-//         hello123
-//     <span key={a} style={{ width: '100px', height: '100px', backgroundColor: 'red' }}>
-//       world!
-//     </span>
-//   </h1>
-// );
-// const elementOne = (
-//   <h3 key={b}>2922</h3>
-// );
-
-console.log(element);
+let element = test();
 
 document.body.appendChild(patch(undefined, element).elm);
+oldnode = element;
+a += 1;
 
-// setTimeout(() => {
-//   patch(element, elementOne);
-// }, 3000);
+setInterval(() => {
+  a += 1;
+  element = test();
+  patch(oldnode, element);
+  oldnode = element;
+}, 1000);
