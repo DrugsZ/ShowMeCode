@@ -4,8 +4,6 @@ import init from './patch';
 
 export default init;
 
-export { createElm } from './VNode';
-
 export function createElement(tag, props, ...children) {
   let newChildren;
   if (children) {
