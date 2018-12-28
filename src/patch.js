@@ -12,11 +12,12 @@ export default function init() {
    * @param {Node} parentElm 将被操作的父节点
    * @param {Array<VNode>} vnodes 将要插入的节点
    * @param {Node | null} refNode 参考节点
+   * @param {Number} startIdx 开始索引
+   * @param {Number} endIdx 结束索引
    */
-  const addVnodes = (parentElm, vnodes, refNode) => {
-    const len = vnodes.length;
-    for (let i = 0; i < len; i += 1) {
-      const vnode = vnodes[i];
+  const addVnodes = (parentElm, vnodes, refNode, startIdx, endIdx) => {
+    for (; startIdx <= endIdx; startIdx += 1) {
+      const vnode = vnodes[startIdx];
       parentElm.insertBefore(createElm(vnode), refNode);
     }
   };
@@ -25,11 +26,10 @@ export default function init() {
    * @param {Node} parentElm 将被操作的父节点
    * @param {Array<VNode>} vnodes 将要移除的结点
    */
-  const removeVnodes = (parentElm, vnodes) => {
-    const len = vnodes.length;
-    for (let i = 0; i < len; i += 1) {
-      const vnode = vnodes[i];
-      parentElm.removeChild(vnode.elm);
+  const removeVnodes = (parentElm, vnodes, startIdx, endIdx) => {
+    for (; startIdx < endIdx; startIdx += 1) {
+      const vnode = vnodes[startIdx];
+      if (vnode)parentElm.removeChild(vnode.elm);
     }
   };
   const patchVnode = (oldVnode, vnode) => {
@@ -43,7 +43,7 @@ export default function init() {
       if (isDef(oldCh) && isDef(ch)) {
         if (oldCh !== ch) updateChildren(elm, oldCh, ch);
       } else if (isDef(ch)) {
-        addVnodes(elm, ch);
+        addVnodes(elm, ch, null, 0, ch.length - 1);
       } else if (isDef(oldCh)) {
         removeVnodes(elm, oldCh);
       }
@@ -76,6 +76,7 @@ export default function init() {
     let oldKeyToIdx;
     let idxInOld;
     let elmToMove;
+    let before;
 
     while (oldStartIdx <= oldEndIdx && newStartIdx <= newEndIdx) {
       if (isUndef(oldStartVnode)) {
@@ -118,11 +119,22 @@ export default function init() {
 
         if (isUndef(idxInOld)) {
           parentElm.insertBefore(createElm(newStartVnode), oldStartVnode);
-          newStartIdx += 1;
-          newStartVnode = ch[newStartIdx];
         } else {
           elmToMove = oldCh[idxInOld];
+          patchVnode(elmToMove, newStartVnode);
+          parentElm.insertBefore(elmToMove.elm, oldStartVnode.elm);
         }
+        newStartIdx += 1;
+        newStartVnode = ch[newStartIdx];
+      }
+    }
+
+    if (oldStartIdx <= oldEndIdx || newStartIdx <= newEndIdx) {
+      if (oldStartIdx > oldEndIdx) {
+        before = ch[newStartIdx + 1] == null ? null : ch[newStartIdx + 1].elm;
+        addVnodes(parentElm, ch, before, newStartIdx, newEndIdx);
+      } else {
+        removeVnodes(parentElm, oldCh, oldStartIdx, oldEndIdx);
       }
     }
   }
