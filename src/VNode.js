@@ -54,6 +54,5 @@ const normalizeChildren = (children) => {
 
 export {
   VNode,
-  createEmptyVNode,
   normalizeChildren,
 };
