@@ -15,37 +15,6 @@ class VNode {
   }
 }
 
-const createElm = (vnode) => {
-  if (isPrimitive(vnode.text)) {
-    vnode.elm = document.createTextNode(vnode.text);
-    return vnode.elm;
-  }
-
-  const {
-    tag,
-    props = {},
-    children,
-  } = vnode;
-  vnode.elm = document.createElement(tag);
-  const { elm } = vnode;
-
-  const {
-    style = {},
-  } = props;
-
-  Object.keys(style).forEach((key) => {
-    elm.setAttribute(key, style[key]);
-  });
-
-  if (children) {
-    children.forEach((node) => {
-      elm.appendChild(createElm(node));
-    });
-  }
-
-  return vnode.elm;
-};
-
 /**
  *
  * @param {string | number | symbol | boolean} str 创建文字节点的值
@@ -59,6 +28,10 @@ const createTextNode = (str) => {
 
 export const createEmptyVNode = () => new VNode();
 
+/**
+ * 统一children
+ * @param {Array<VNode>} children 将要序列化children
+ */
 const normalizeChildren = (children) => {
   const res = [];
   let newChild = Object.create(null);
@@ -74,8 +47,8 @@ const normalizeChildren = (children) => {
   return res;
 };
 
+
 export {
   VNode,
-  createElm,
   normalizeChildren,
 };

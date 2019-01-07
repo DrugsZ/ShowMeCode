@@ -1,12 +1,45 @@
-import { isUndef, isDef } from './util';
-
-import { createElm } from './VNode';
+import { isUndef, isDef, isPrimitive } from './util';
 
 const sameVnode = (old, now) => (
   old.key === now.key && old.tag === now.tag
 );
 
-export default function init() {
+export default function init(modules) {
+  /**
+   * 创建物理DOM
+   * @param {VNode} vnode 将要实例DOM的虚拟dom
+   * @returns {Node} 物理DOM
+   */
+  const createElm = (vnode) => {
+    if (isPrimitive(vnode.text)) {
+      vnode.elm = document.createTextNode(vnode.text);
+      return vnode.elm;
+    }
+
+    const {
+      tag,
+      props = {},
+      children,
+    } = vnode;
+    vnode.elm = document.createElement(tag);
+    const { elm } = vnode;
+
+    const {
+      style = {},
+    } = props;
+
+    Object.keys(style).forEach((key) => {
+      elm.setAttribute(key, style[key]);
+    });
+
+    if (children) {
+      children.forEach((node) => {
+        elm.appendChild(createElm(node));
+      });
+    }
+
+    return vnode.elm;
+  };
   /**
    *
    * @param {Node} parentElm 将被操作的父节点
