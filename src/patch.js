@@ -1,20 +1,39 @@
 import { isUndef, isDef, isPrimitive } from './util';
+import { createEmptyVNode } from './VNode';
 
 const sameVnode = (old, now) => (
   old.key === now.key && old.tag === now.tag
 );
 
+const emptyNode = createEmptyVNode();
+
+const hooks = ['beforeCreate', 'created', 'update'];
+
 export default function init(modules) {
+  let i;
+  let j;
+  const cbs = {};
+  for (i = 0; i < hooks.length; i++) {
+    cbs[hooks[i]] = [];
+    for (j = 0; j < modules.length; j++) {
+      if (isDef(modules[j][hooks[i]])) {
+        cbs[hooks[i]].push(modules[j][hooks[i]]);
+      }
+    }
+  }
+
   /**
    * 创建物理DOM
    * @param {VNode} vnode 将要实例DOM的虚拟dom
-   * @returns {Node} 物理DOM
+   * @returns {Element} 物理DOM
    */
   const createElm = (vnode) => {
     if (isPrimitive(vnode.text)) {
       vnode.elm = document.createTextNode(vnode.text);
       return vnode.elm;
     }
+
+    for (i = 0; i < cbs.beforeCreate.length; i++)cbs.beforeCreate[i](emptyNode, vnode);
 
     const {
       tag,
@@ -37,7 +56,7 @@ export default function init(modules) {
         elm.appendChild(createElm(node));
       });
     }
-
+    for (i = 0; i < cbs.created.length; i++)cbs.created[i](emptyNode, vnode);
     return vnode.elm;
   };
   /**
@@ -71,6 +90,10 @@ export default function init(modules) {
     const oldCh = oldVnode.children;
     const ch = vnode.children;
     if (oldVnode === vnode) return;
+
+    if (isDef(vnode.props)) {
+      for (i = 0; i < cbs.update.length; ++i) cbs.update[i](oldVnode, vnode);
+    }
 
     if (isUndef(vnode.text)) {
       if (isDef(oldCh) && isDef(ch)) {
