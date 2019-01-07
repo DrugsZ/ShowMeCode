@@ -26,6 +26,10 @@ const createTextNode = (str) => {
   return node;
 };
 
+/**
+ * 创建空白虚拟节点
+ * @returns {VNode}
+ */
 export const createEmptyVNode = () => new VNode();
 
 /**
@@ -50,5 +54,6 @@ const normalizeChildren = (children) => {
 
 export {
   VNode,
+  createEmptyVNode,
   normalizeChildren,
 };
