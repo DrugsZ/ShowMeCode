@@ -10,7 +10,6 @@ const updateClass = (oldVnode, vnode) => {
   nClass = nClass || '';
 
   elm.setAttribute('class', nClass);
-  console.log(nClass);
 };
 
 export default {
