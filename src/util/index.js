@@ -16,3 +16,12 @@ export function isPrimitive(value) {
       || typeof value === 'boolean'
   );
 }
+
+
+export function cached(fn) {
+  const cache = Object.create(null);
+  return (function createFn(str) {
+    const hit = cache[str];
+    return hit || (cache[str] = fn(str));
+  });
+}
