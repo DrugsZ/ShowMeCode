@@ -37,19 +37,10 @@ export default function init(modules) {
 
     const {
       tag,
-      props = {},
       children,
     } = vnode;
     vnode.elm = document.createElement(tag);
     const { elm } = vnode;
-
-    const {
-      style = {},
-    } = props;
-
-    Object.keys(style).forEach((key) => {
-      elm.setAttribute(key, style[key]);
-    });
 
     if (children) {
       children.forEach((node) => {
