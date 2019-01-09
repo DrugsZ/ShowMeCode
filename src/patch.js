@@ -101,10 +101,9 @@ export default function init(modules) {
 
   const createKeyToOldIdx = (children, beginIdx, endIdx) => {
     const map = new Map();
-    let key;
     for (let index = beginIdx; index < endIdx; index++) {
       const ch = children[index];
-      key = ch.key;
+      const { key } = ch.key;
       map.set(key, index);
     }
 
