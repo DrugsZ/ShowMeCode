@@ -51,8 +51,30 @@ const normalizeChildren = (children) => {
   return res;
 };
 
+const normalizeEvent = (props) => {
+  if (!props) {
+    return {};
+  }
+  const newProps = props || {};
+  const res = {};
+  const rp = new RegExp(/^on/);
+
+  Object.keys(newProps).forEach((key) => {
+    if (rp.test(key)) {
+      const newkey = key.replace(rp, '').toLowerCase();
+      res[newkey] = newProps[key];
+      delete newProps[key];
+    }
+  });
+
+  newProps.on = res || {};
+
+  return newProps;
+};
+
 
 export {
   VNode,
   normalizeChildren,
+  normalizeEvent,
 };
