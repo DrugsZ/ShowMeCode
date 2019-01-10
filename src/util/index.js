@@ -25,3 +25,13 @@ export function cached(fn) {
     return hit || (cache[str] = fn(str));
   });
 }
+
+export const eachObj = (obj, cb) => {
+  if (typeof obj !== 'object') return;
+  if (typeof cb !== 'function') return;
+
+  const keys = Object.keys(obj);
+  keys.forEach((key, index, keys) => {
+    cb.call(null, key, index, keys);
+  });
+};
