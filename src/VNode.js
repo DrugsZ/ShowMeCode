@@ -72,9 +72,34 @@ const normalizeEvent = (props) => {
   return newProps;
 };
 
+const normalizeAttrs = (props) => {
+  if (!props) {
+    return {};
+  }
 
+  const newProps = props || {};
+  const res = {};
+
+  const otherAttr = ['on', 'class', 'style'];
+  Object.keys(newProps).forEach((key) => {
+    if (!otherAttr.includes(key)) {
+      res[key] = newProps[key];
+      delete newProps[key];
+    }
+  });
+
+  newProps.attrs = res || {};
+
+  return newProps;
+};
+
+const normalizeProps = (props) => {
+  const newPropsPassEvent = normalizeEvent(props);
+  const newPropsPassAttrs = normalizeAttrs(newPropsPassEvent);
+  return newPropsPassAttrs;
+};
 export {
   VNode,
   normalizeChildren,
-  normalizeEvent,
+  normalizeProps,
 };
