@@ -2,61 +2,32 @@ import init, { createElement } from './src/index';
 import classModules from './src/modules/class';
 import styleModules from './src/modules/style';
 import eventModules from './src/modules/event';
+import attrModules from './src/modules/attributes';
 
-const patch = init([classModules, styleModules, eventModules]);
-let a = 7124;
-let b = 'ttt';
-let oldnode = null;
+const patch = init([classModules, styleModules, eventModules, attrModules]);
 
-const style = {
-  opacity: 1,
-};
+const attr = 'text';
+const value = 77;
 
-const styleOne = {
-  opacity: 0,
-};
-
-const eventT = (str, event) => {
-  console.log(str, event);
-};
-
-const eventTest = eventT.bind(this, 123);
-
-const eventTestTwo = eventT.bind(this, 222);
-
-let evT = eventTest;
-
-const eventTest_1 = () => console.log(111);
-let testStyle = styleOne;
 const test = () => (
-  <div
-    className={b}
-    style={testStyle}
-    onClick={
-      evT
+  <div>
+    <input
+      type={attr}
+      value={value}
+      onInput={
+      (e) => {
+        console.log(e);
+      }
     }
-  >
-    <h3><span>{a}</span></h3>
+    />
   </div>
 );
-
-const element = (
-  <div className="tttt ccc" style={styleOne}>
-    <h3><span>{a}</span></h3>
-  </div>
-);
-
-
+let oldElement;
+const element = test();
 document.body.appendChild(patch(undefined, element).elm);
-oldnode = element;
-a += 1;
-
-setInterval(() => {
-  a++;
-  b = b === 'ttt' ? 'ccc' : 'ttt';
-  evT = evT === eventTest ? eventTestTwo : eventTest;
-  testStyle = testStyle === styleOne ? style : styleOne;
-  const elementOne = test();
-  patch(oldnode, elementOne);
-  oldnode = elementOne;
-}, 1000);
+// setInterval(() => {
+//   attr = attr === 'text' ? 'submit' : 'text';
+//   oldElement = element;
+//   element = test();
+//   patch(oldElement, element);
+// }, 5000);
