@@ -1,5 +1,5 @@
 const updateClass = (oldVnode, vnode) => {
-  const elm = vnode.elm;
+  const { elm } = vnode;
   let oldClass = oldVnode.props.className;
   let nClass = vnode.props.className;
 
