@@ -1,3 +1,6 @@
+
+import { eq } from '../util';
+
 function invokeHandler(handler, vnode, event) {
   if (typeof handler === 'function') {
     handler.call(undefined, event, vnode);
@@ -29,7 +32,7 @@ function updateEventListeners(oldVnode, vnode) {
   const { on } = vnode.props;
   const { elm } = vnode;
 
-  if (oldOn === on) {
+  if (eq(oldOn, on)) {
     return;
   }
 

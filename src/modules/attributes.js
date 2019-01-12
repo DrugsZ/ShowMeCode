@@ -1,4 +1,4 @@
-import { eachObj } from '../util';
+import { eachObj, eq } from '../util';
 
 const updateAttributes = (oldVnode, vnode) => {
   let oldAttrs = oldVnode.props.attrs;
@@ -6,7 +6,7 @@ const updateAttributes = (oldVnode, vnode) => {
   const { elm } = vnode;
 
   if (!oldAttrs && !attrs) return;
-  if (Object.is(oldAttrs, attrs)) return;
+  if (eq(oldAttrs, attrs)) return;
 
   oldAttrs = oldAttrs || {};
   attrs = attrs || {};
