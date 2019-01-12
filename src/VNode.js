@@ -80,7 +80,7 @@ const normalizeAttrs = (props) => {
   const newProps = props || {};
   const res = {};
 
-  const otherAttr = ['on', 'class', 'style'];
+  const otherAttr = ['on', 'className', 'style'];
   Object.keys(newProps).forEach((key) => {
     if (!otherAttr.includes(key)) {
       res[key] = newProps[key];
