@@ -93,6 +93,8 @@ export default function init(modules) {
         addVnodes(elm, ch, null, 0, ch.length - 1);
       } else if (isDef(oldCh)) {
         removeVnodes(elm, oldCh);
+      } else if (isDef(oldVnode.text)) {
+        oldVnode.textContent = '';
       }
     } else if (oldVnode.text !== vnode.text) {
       elm.textContent = vnode.text;
