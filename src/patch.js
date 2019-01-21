@@ -179,7 +179,7 @@ export default function init(modules) {
 
     if (oldStartIdx <= oldEndIdx || newStartIdx <= newEndIdx) {
       if (oldStartIdx > oldEndIdx) {
-        before = ch[newStartIdx + 1] == null ? null : ch[newStartIdx + 1].elm;
+        before = ch[newEndIdx + 1] == null ? null : ch[newEndIdx + 1].elm;
         addVnodes(parentElm, ch, before, newStartIdx, newEndIdx);
       } else {
         removeVnodes(parentElm, oldCh, oldStartIdx, oldEndIdx);
