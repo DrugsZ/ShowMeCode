@@ -146,3 +146,18 @@ export const eq = (a, b, aStack, bStack) => {
   // 更复杂的对象使用 deepEq 函数进行深度比较
   return deepEq(a, b, aStack, bStack);
 };
+
+const bailRE = /[^\w.$]/;
+function parsePath(path) {
+  if (bailRE.test(path)) {
+    return;
+  }
+  const segments = path.split('.');
+  return function getter(obj) {
+    for (let i = 0; i < segments.length; i++) {
+      if (!obj) return;
+      obj = obj[segments[i]];
+    }
+    return obj;
+  };
+}
