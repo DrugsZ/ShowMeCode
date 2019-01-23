@@ -15,6 +15,7 @@ class Watcher {
   get() {
     pushTarget(this.cb);
     const value = this.content[this.expOrFn];
+    Watcher.target = null;
     return value;
   }
 }
