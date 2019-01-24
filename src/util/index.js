@@ -148,7 +148,7 @@ export const eq = (a, b, aStack, bStack) => {
 };
 
 const bailRE = /[^\w.$]/;
-function parsePath(path) {
+export function parsePath(path) {
   if (bailRE.test(path)) {
     return;
   }
