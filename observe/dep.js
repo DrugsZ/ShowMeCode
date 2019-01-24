@@ -1,9 +1,7 @@
-const test = (target) => {
-  console.log(target);
-};
-
-class Dep {
+const uid = 0;
+export default class Dep {
   constructor() {
+    this.id = uid++;
     this.subs = [];
   }
 
@@ -26,4 +24,12 @@ class Dep {
   }
 }
 
-test(Dep);
+const targetStack = [];
+export const pushTarget = (_target) => {
+  if (_target)targetStack.push(_target);
+  Dep.target = target;
+};
+
+export const popTarget = () => {
+  Dep.target = targetStack.pop();
+};

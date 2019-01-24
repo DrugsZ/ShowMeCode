@@ -17,7 +17,7 @@ const defineReactive = (obj, key, val = obj[key]) => {
     get: function reactiveGetter() {
       const value = getter ? getter.call(obj) : val;
 
-      if (Watcher.target) {
+      if (Dep.target) {
         dep.addSub(Watcher.target);
       }
 
@@ -49,7 +49,7 @@ const walk = (obj) => {
   }
 };
 
-class Observe {
+export default class Observe {
   constructor(value) {
     this.value = value;
     walk(value);

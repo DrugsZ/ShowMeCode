@@ -1,11 +1,7 @@
 // import { parsePath } from '../src/util';
+import { pushTarget, popTarget } from './dep.js';
 
-const setTarget = (target) => {
-  target.target = null;
-};
-
-
-class Watcher {
+export default class Watcher {
   constructor(content, expOrFn, cb) {
     this.cb = cb;
     this.expOrFn = expOrFn;
@@ -19,12 +15,7 @@ class Watcher {
     pushTarget(this.cb);
     // const value = this.content[this.expOrFn];
     const value = this.getter.call(this.content, this.content);
-    Watcher.target = null;
+    popTarget();
     return value;
   }
 }
-
-const pushTarget = (target) => {
-  Watcher.target = target;
-};
-setTarget(Watcher);
