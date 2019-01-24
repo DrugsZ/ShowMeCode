@@ -1,4 +1,4 @@
-// import { parsePath } from '../src/util';
+import { parsePath } from '../src/util';
 import { pushTarget, popTarget } from './dep.js';
 
 export default class Watcher {

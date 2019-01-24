@@ -1,4 +1,5 @@
 // import Watcher, { pushTarget } from './watch';
+import Dep from './dep';
 
 const defineReactive = (obj, key, val = obj[key]) => {
   const dep = new Dep();
@@ -18,7 +19,7 @@ const defineReactive = (obj, key, val = obj[key]) => {
       const value = getter ? getter.call(obj) : val;
 
       if (Dep.target) {
-        dep.addSub(Watcher.target);
+        dep.addSub(Dep.target);
       }
 
       return value;

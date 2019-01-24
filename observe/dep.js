@@ -1,4 +1,4 @@
-const uid = 0;
+let uid = 0;
 export default class Dep {
   constructor() {
     this.id = uid++;
@@ -27,7 +27,7 @@ export default class Dep {
 const targetStack = [];
 export const pushTarget = (_target) => {
   if (_target)targetStack.push(_target);
-  Dep.target = target;
+  Dep.target = _target;
 };
 
 export const popTarget = () => {
