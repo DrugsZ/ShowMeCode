@@ -4,14 +4,13 @@ import Watcher from './watch';
 const data = {
   a: {
     c: 7,
+    d: 1,
   },
 };
 window.test = data;
 new Observe(data);
 new Observe(data.a);
-const a = new Watcher(data, 'a', () => {
-  console.log(1);
-});
-const c = new Watcher(data, 'a.c', () => {
-  console.log(2);
+
+window.a = new Watcher(data, () => data.a.c + data.a.d, (val) => {
+  console.log(val);
 });
