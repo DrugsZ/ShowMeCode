@@ -1,4 +1,4 @@
-import { cached } from '../util';
+import { cached } from '../../util';
 
 let emptyStyle;
 

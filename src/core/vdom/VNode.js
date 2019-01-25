@@ -1,4 +1,4 @@
-import { isPrimitive } from './util';
+import { isPrimitive } from '../util';
 
 
 class VNode {

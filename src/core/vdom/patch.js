@@ -1,4 +1,4 @@
-import { isUndef, isDef, isPrimitive } from './util';
+import { isUndef, isDef, isPrimitive } from '../util';
 import { createEmptyVNode } from './VNode';
 
 const sameVnode = (old, now) => (
