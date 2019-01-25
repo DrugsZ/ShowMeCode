@@ -70,7 +70,7 @@ export default function init(modules) {
    * @param {Array<VNode>} vnodes 将要移除的结点
    */
   const removeVnodes = (parentElm, vnodes, startIdx, endIdx) => {
-    for (; startIdx < endIdx; startIdx += 1) {
+    for (; startIdx <= endIdx; startIdx += 1) {
       const vnode = vnodes[startIdx];
       if (vnode)parentElm.removeChild(vnode.elm);
     }
@@ -188,17 +188,29 @@ export default function init(modules) {
   }
 
   const patch = (oldVnode, vnode) => {
-    if (isUndef(oldVnode)) {
-      createElm(vnode);
-    } else if (isDef(vnode)) {
-      if (sameVnode(oldVnode, vnode)) {
-        patchVnode(oldVnode, vnode);
-      } else {
+    if (isUndef(vnode)) {
+      if (isDef(oldVnode)) {
         const { elm } = oldVnode;
         const parent = elm.parentNode;
-        createElm(vnode);
-        parent.removeChild(elm);
+        if (parent !== null) {
+          removeVnodes(parent, [oldVnode], 0, 0);
+        }
+      }
+      return;
+    }
+
+    if (isUndef(oldVnode)) {
+      createElm(vnode);
+    } else if (sameVnode(oldVnode, vnode)) {
+      patchVnode(oldVnode, vnode);
+    } else {
+      const { elm } = oldVnode;
+      const parent = elm.parentNode;
+      createElm(vnode);
+
+      if (parent !== null) {
         parent.insertBefore(vnode.elm, elm.nextSibling);
+        removeVnodes(parent, [oldVnode], 0, 0);
       }
     }
 
