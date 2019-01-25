@@ -1,5 +1,5 @@
 
-import { eq } from '../util';
+import { eq } from '../../util';
 
 function invokeHandler(handler, vnode, event) {
   if (typeof handler === 'function') {

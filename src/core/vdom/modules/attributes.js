@@ -1,4 +1,4 @@
-import { eachObj, eq } from '../util';
+import { eachObj, eq } from '../../util';
 
 const updateAttributes = (oldVnode, vnode) => {
   let oldAttrs = oldVnode.props.attrs;

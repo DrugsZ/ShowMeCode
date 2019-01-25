@@ -1,8 +1,8 @@
-import init, { createElement } from './src/index';
-import classModules from './src/modules/class';
-import styleModules from './src/modules/style';
-import eventModules from './src/modules/event';
-import attrModules from './src/modules/attributes';
+import init, { createElement } from './src/core/vdom';
+import classModules from './src/core/vdom/modules/class';
+import styleModules from './src/core/vdom/modules/style';
+import eventModules from './src/core/vdom/modules/event';
+import attrModules from './src/core/vdom/modules/attributes';
 
 const patch = init([classModules, styleModules, eventModules, attrModules]);
 
@@ -24,7 +24,9 @@ const test = () => (
 );
 let oldElement;
 const element = test();
-document.body.appendChild(patch(undefined, element).elm);
+oldElement = patch(undefined, element);
+document.body.appendChild(oldElement.elm);
+patch(oldElement, undefined);
 // setInterval(() => {
 //   attr = attr === 'text' ? 'submit' : 'text';
 //   oldElement = element;
