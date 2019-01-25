@@ -6,6 +6,7 @@ const data = {
     c: 7,
   },
 };
+window.test = data;
 new Observe(data);
 new Observe(data.a);
 const a = new Watcher(data, 'a', () => {
