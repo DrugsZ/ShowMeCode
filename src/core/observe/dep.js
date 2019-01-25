@@ -2,25 +2,34 @@ let uid = 0;
 export default class Dep {
   constructor() {
     this.id = uid++;
-    this.subs = [];
+    this.subs = new Map();
   }
 
   addSub(sub) {
-    this.subs.push(sub);
-  }
-
-  removeSub(sub) {
-    if (this.subs.length) {
-      const index = this.subs.findIndex(sub);
-      if (index > -1) {
-        return this.subs.splice(index, 1);
-      }
+    if (!this.subs.has(sub.id)) {
+      this.subs.set(sub.id, sub);
     }
   }
 
+  removeSub(sub) {
+    let result;
+    if (this.subs.has(sub.id)) {
+      result = this.subs.get(sub.id);
+      this.subs.delete(sub.id);
+    }
+    return result;
+    // if (this.subs.length) {
+    //   const index = this.subs.findIndex(sub);
+    //   if (index > -1) {
+    //     return this.subs.splice(index, 1);
+    //   }
+    // }
+  }
+
   notify() {
-    const subs = this.subs.slice();
-    subs.forEach(sub => sub());
+    // const subs = this.subs.slice();
+    // subs.forEach(sub => sub());
+    this.subs.forEach(sub => sub.update());
   }
 }
 
