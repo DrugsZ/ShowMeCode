@@ -11,6 +11,10 @@ export default class Dep {
     }
   }
 
+  depend() {
+    Dep.target.addDep(this);
+  }
+
   removeSub(sub) {
     let result;
     if (this.subs.has(sub.id)) {

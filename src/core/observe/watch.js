@@ -9,6 +9,8 @@ export default class Watcher {
     this.cb = cb;
     this.expOrFn = expOrFn;
     this.content = content;
+    this.deps = new Map();
+    this.newDeps = new Map();
     if (typeof expOrFn === 'function') {
       this.getter = expOrFn;
     } else {
@@ -19,11 +21,39 @@ export default class Watcher {
     this.value = this.get();
   }
 
+  addDep(dep) {
+    const { id } = dep;
+    if (!this.newDeps.has(id)) {
+      this.newDeps.set(id, dep);
+      if (!this.deps.has(id)) {
+        dep.addSub(this);
+      }
+    }
+  }
+
+  cleanupDeps() {
+    this.deps.forEach((dep) => {
+      if (!this.newDeps.has(dep.id)) {
+        dep.removeSub(this);
+      }
+    });
+
+    [this.deps, this.newDeps] = [this.newDeps, this.deps];
+    this.newDeps.clear();
+  }
+
   get() {
     pushTarget(this);
+    let value;
     // const value = this.content[this.expOrFn];
-    const value = this.getter.call(this.content, this.content);
-    popTarget();
+    try {
+      value = this.getter.call(this.content, this.content);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      popTarget();
+      this.cleanupDeps();
+    }
     return value;
   }
 
@@ -34,5 +64,9 @@ export default class Watcher {
     if (!Object.is(oldVal, this.value)) {
       this.cb.call(this.content, this.value, oldVal);
     }
+  }
+
+  teardown() {
+    this.deps.forEach(dep => dep.removeSub(this));
   }
 }
