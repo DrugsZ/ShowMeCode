@@ -1,5 +1,6 @@
 // import Watcher, { pushTarget } from './watch';
 import Dep from './dep';
+import { isObject } from '../util';
 
 const defineReactive = (obj, key, val = obj[key]) => {
   const dep = new Dep();
@@ -10,7 +11,7 @@ const defineReactive = (obj, key, val = obj[key]) => {
   const getter = property && property.get;
   const setter = property && property.set;
 
-
+  const childOb = observe(val);
   Object.defineProperty(obj, key, {
     enumerable: true,
     configurable: true,
@@ -50,9 +51,25 @@ const walk = (obj) => {
   }
 };
 
-export default class Observe {
+export default class Observer {
   constructor(value) {
     this.value = value;
     walk(value);
   }
 }
+
+
+export const observe = (value) => {
+  if (!isObject(value)) {
+    return;
+  }
+
+  let ob;
+  if (Reflect.has('__ob__') && value.__ob__ instanceof Observer) {
+    ob = value.__ob__;
+  } else {
+    ob = new Observer(value);
+  }
+
+  return ob;
+};
