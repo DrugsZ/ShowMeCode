@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "dev": "parcel index.html"
+    "dev": "parcel index.html",
+    "lint": "eslint src  -o lintResult.html -f html"
   },
   "keywords": [
     "virtual",
