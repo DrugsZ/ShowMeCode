@@ -10,7 +10,12 @@ const data = {
 window.test = data;
 new Observe(data);
 new Observe(data.a);
+const divInfo = document.querySelector('div');
+const input = document.querySelector('input');
+input.addEventListener('keyup', (e) => {
+  test.a.c = e.target.value;
+});
 
-window.a = new Watcher(data, () => data.a.c + data.a.d, (val) => {
-  console.log(val);
+window.a = new Watcher(data, 'a.c', (val) => {
+  divInfo.innerHTML = val;
 });

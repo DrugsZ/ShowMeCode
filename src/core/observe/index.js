@@ -20,8 +20,8 @@ const defineReactive = (obj, key, val = obj[key]) => {
       const value = getter ? getter.call(obj) : val;
 
       if (Dep.target) {
+        dep.value = value;
         dep.depend();
-        // dep.addSub(Dep.target);
       }
 
       return value;
